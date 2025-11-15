@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="bs">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Postavke korisničkog računa</title>
+        <link href="user.css" rel="stylesheet">
+    </head>
+    <body> 
+        <div class="sve">
+            <form class="forma">
+                <h2>Postavke korisničkog računa</h2>
+                <hr class="linija">
+                <p class="opis">Upravljajte vašim korisničkim računom, sigurnosnim postavkama i notifikacijama</p>
+                
+                <fieldset class="sekcija info">
+                    <h3>Podaci o korisničkom računu</h3>
+                    <div class="grupa">
+                        <label for="ime">Ime i prezime</label>
+                        <input type="text" id="ime" placeholder="John Doe">
+                    </div>
+                    <div class="grupa">
+                        <label for="email">Email adresa</label>
+                        <input type="email" id="email" placeholder="john.doe@example.com">
+                    </div>
+                    <div class="grupa">
+                        <label for="elementi">Broj elemenata po stranici (1-100)</label>
+                        <input type="number" id="elementi" min="1" max="100" placeholder="25">
+                    </div>
+                </fieldset>
+
+                <fieldset class="sekcija security">
+                    <h3>Sigurnosne postavke</h3>
+                    <div class="grupa">
+                        <label for="sifra">Nova šifra</label>
+                        <div class="input-wrap">
+                            <input type="password" id="sifra" placeholder="• • • • • • • •">
+                            <p class="textispod">Ostavite prazno ako želite zadržati staru šifru</p>
+                        </div>
+                    </div>
+                    <div class="grupa check">
+                        <input type="checkbox" id="enable2FA">
+                        <label for="enable2FA">Omogući Two-Factor Autentification (2FA)</label>
+                    </div>
+                </fieldset>
+
+                <fieldset class="sekcija obavjestenja">
+                    <h3>Notifikacije</h3>
+                    <div class="grupa select">
+                        <label class="secinfo">Preferirani način komunikacije</label>
+                        <div class="radio-grupa">
+                            <label><input type="radio" name="contactMethod" value="email" checked>Email</label>
+                            <label><input type="radio" name="contactMethod" value="sms">SMS (Text)</label>
+                            <label><input type="radio" name="contactMethod" value="none">None</label>
+                        </div>
+                    </div>
+                    <div class="grupa">
+                        <label for="notificationFrequency">Notification frequency</label>
+                        <select id="notificationFrequency">
+                            <option value="daily" selected>Daily</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                            <option value="never">Never</option>
+                        </select>
+                    </div>
+                </fieldset>
+                <hr class="donja">
+                <button type="submit">Spasi promjene</button>
+            </form>
+        </div>
+    </body>
+</html>

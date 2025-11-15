@@ -1,0 +1,182 @@
+body{
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f6fa;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+.sve{
+    width:90%;
+    max-width: 840px;
+    padding:20px;
+}
+.forma{
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+h2{
+    font-weight: 800;
+    text-align: center;
+
+}
+.linija{
+    background-color: blue;
+    height: 2px;
+}
+.opis{
+    font-style: italic;
+    text-align: center;
+    color: grey;
+    font-size: small;
+    margin-bottom: 20px;
+}
+.sekcija{
+    margin-bottom: 25px;
+    padding: 15px 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.info{
+    background-color: rgb(206, 231, 239);
+}
+.grupa{
+    display: flex;
+    flex-direction: column;
+    margin: 15px;
+}
+.grupa label{
+    font-size: small;
+    font-weight: 600;
+    margin-bottom: 5px;
+
+}
+.grupa input,
+.grupa select {
+    padding: 8px 10px;
+    border: 2px solid rgb(49, 161, 49);
+    border-radius: 8px;
+    font-size: 1rem;
+}
+h3{
+    margin: 10px 10px;
+    padding-bottom: 5px;
+    font-size: large;
+    font-weight: 750;
+}
+.info h3{
+    color: rgb(36, 36, 168);
+}
+.info input{
+    border-color: rgb(113, 203, 206);
+}
+.security{
+    background-color: rgb(253, 216, 222);
+}
+.security input{
+    border-color: rgb(187, 35, 98);
+}
+.security h3{
+    color:rgb(134, 19, 19);
+}
+.textispod{
+    color:grey;
+    font-size: small;
+    margin-top: 5px;
+}
+.obavjestenja{
+    background-color: rgb(178, 225, 178);
+}
+.obavjestenja h3{
+    color: rgb(42, 75, 42);
+}
+button{
+    width:100%;
+    background-color: #5B3FFF;
+    color:white;
+    border:none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #482bcf;
+}
+.donja{
+    margin: 10px 0 15px 0;
+}
+.grupa.check{
+    align-items: center;
+    flex-direction: row;
+}
+.grupa.check input[type="checkbox"]{
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    position: relative;
+    bottom:2px;
+    cursor: pointer;
+}
+.grupa.check label{
+    font-weight: 500;
+    line-height: 1;
+}
+.check label{
+    font-weight: 500;
+    margin-left: 10px;
+}
+.radio-grupa label {
+    margin-right:15px;
+    font-weight: 500;
+}
+.radio-grupa input[type="radio"] {
+    accent-color: #ff5757;
+    cursor: pointer;
+}
+.secinfo{
+    margin-bottom: 5px;
+}
+.input-wrap {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+@media screen and (min-width: 750px) {
+    .grupa {
+        flex-direction: row; 
+        align-items: flex-start; 
+    }
+    .grupa label {
+        width: 200px;
+        margin-bottom: 0; 
+    }
+    .grupa input[type="text"],
+    .grupa input[type="email"],
+    .grupa input[type="number"],
+    .grupa input[type="password"],
+    .input-wrap {
+        flex: 1; 
+    }
+    .obavjestenja .grupa .radio-grupa {
+        flex: 1; 
+        min-width: 0; 
+        flex-wrap: nowrap;
+    }
+    .grupa.check label {
+        white-space: nowrap; 
+    }
+    .obavjestenja .grupa select {
+        flex: 1;
+        min-width: 0; 
+    }
+    .grupa.check {
+
+    }
+}
