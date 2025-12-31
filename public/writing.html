@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kolaborativni Editor Scenarija</title>
+    <link rel="stylesheet" href="writing.css">
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-left">
+            <button class="back-button">← Neimenovani scenarij</button>
+        </div>
+        <div class="header-center">
+            <button class="tab-button active">SCENA</button>
+            <button class="tab-button">AKCIJA</button>
+            <button class="tab-button">LIK</button>
+            <button class="tab-button">DIJALOG</button>
+        </div>
+        <div class="header-right">
+            <button class="save-button">Spasi</button>
+        </div>
+    </header>
+
+    <div class="toolbar">
+        <div class="toolbar-group">
+            <button id="btnBold" class="toolbar-btn">Bold</button>
+            <button id="btnItalic" class="toolbar-btn">Italic</button>
+            <button id="btnUnderline" class="toolbar-btn">Underline</button>
+        </div>
+
+        <div class="toolbar-group">
+            <button id="btnBrojRijeci" class="toolbar-btn primary">Broj Riječi</button>
+            <button id="btnUloge" class="toolbar-btn primary">Uloge</button>
+            <button id="btnPogresna" class="toolbar-btn primary">Pogrešna Uloga</button>
+        </div>
+
+        <div class="toolbar-group">
+            <input type="text" id="ulogaInput" placeholder="Ime uloge" class="toolbar-input">
+        </div>
+
+        <div class="toolbar-group">
+            <button id="btnBrojLinija" class="toolbar-btn secondary">Broj Linija</button>
+            <button id="btnScenarij" class="toolbar-btn secondary">Scenarij Uloge</button>
+            <button id="btnGrupisi" class="toolbar-btn secondary">Grupisi Uloge</button>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <!-- Sidebar sa scenama -->
+        <aside class="sidebar">
+            <h2>Scene (4)</h2>
+            <ul class="scene-list" id="sceneList">
+                <li class="scene-item active">
+                    <span class="scene-number">1.</span>
+                    <span class="scene-title">INT. STARSHIP BRIDGE - NIGHT</span>
+                    <span class="scene-pages">(3/8)</span>
+                </li>
+                <li class="scene-item">
+                    <span class="scene-number">2.</span>
+                    <span class="scene-title">EXT. ASTEROID FIELD - DAY</span>
+                    <span class="scene-pages">(3/8)</span>
+                </li>
+                <li class="scene-item">
+                    <span class="scene-number">3.</span>
+                    <span class="scene-title">INT. ENGINE ROOM - NIGHT</span>
+                    <span class="scene-pages">(2/8)</span>
+                </li>
+                <li class="scene-item">
+                    <span class="scene-number">4.</span>
+                    <span class="scene-title">EXT. LUNAR SURFACE - DAY</span>
+                    <span class="scene-pages">(2/8)</span>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Glavni sadržaj -->
+        <div class="content">
+            <!-- Backend kontrole -->
+            <div class="backend-controls">
+                <div class="control-row">
+                    <div class="control-group">
+                        <label>User ID:</label>
+                        <input type="number" id="userIdInput" value="1" class="small-input">
+                    </div>
+                    <div class="control-group">
+                        <label>Scenario ID:</label>
+                        <input type="number" id="scenarioIdInput" value="204" class="small-input">
+                    </div>
+                    <div class="control-group">
+                        <label>Novi Scenario:</label>
+                        <input type="text" id="noviScenarioInput" placeholder="Naslov scenarija" class="medium-input">
+                    </div>
+                </div>
+
+                <div class="control-row">
+                    <div class="control-group">
+                        <label>Line ID:</label>
+                        <input type="number" id="lineIdInput" placeholder="ID linije" class="small-input">
+                    </div>
+                    <div class="control-group">
+                        <label>Line ID za Ažuriranje:</label>
+                        <input type="text" id="lineIdAzuriranjeInput" placeholder="Novi Tekst Linije:" class="large-input">
+                    </div>
+                </div>
+
+                <div class="control-row">
+                    <div class="control-group">
+                        <label>Zaključaj Ime Lika:</label>
+                        <input type="text" id="zakljucajImeLikaInput" placeholder="ime1, ime2, ime3" class="large-input">
+                    </div>
+                </div>
+
+                <div class="control-row">
+                    <div class="control-group">
+                        <label>Staro Ime Lika:</label>
+                        <input type="text" id="staroImeLikaInput" placeholder="Novo Ime Lika:" class="medium-input">
+                    </div>
+                    <div class="control-group">
+                        <label>Delta Promjene (since):</label>
+                        <input type="number" id="deltaPromjeneInput" value="0" class="small-input">
+                    </div>
+                </div>
+
+                <div class="button-row">
+                    <button id="btnUcitajScenario" class="action-btn green">Učitaj Scenario</button>
+                    <button id="btnKreirajNovi" class="action-btn blue">Kreiraj Novi</button>
+                    <button id="btnOtvoriLiniju" class="action-btn orange">Otvori Liniju</button>
+                </div>
+
+                <div class="button-row">
+                    <button id="btnAzurirajLiniju" class="action-btn orange">Ažuriraj Liniju</button>
+                    <button id="btnZakljucajIme" class="action-btn purple">Zaključaj Ime</button>
+                    <button id="btnPromijeniIme" class="action-btn purple">Promijeni Ime</button>
+                    <button id="btnUcitajPromjene" class="action-btn gray">Učitaj Promjene</button>
+                </div>
+            </div>
+
+            <div class="status-message" id="statusMessage">
+                Scenario 'Neimenovani scenarij' je učitan (3 linija).
+            </div>
+
+            <div id="divEditor" class="editor" contenteditable="true" spellcheck="false">
+INT. VOZ – JUTRO
+MILA
+Sjedi pored prozora, slušalice u ušima. Voz lagano trese dok prolazi kroz maglu prekrivene doline.
+Gleda u svoj odraz u staklu, zamišljena.
+
+KONDUKTER
+(zaustavlja se pored nje)
+Kartu, molim.
+
+MIKA
+Vadi zgužvanu kartu iz džepa.
+Izvolite… znam, izgleda užasno.
+
+KONDUKTER
+(smiješeći se)
+Sve dok je važeća, sasvim je u redu.
+            </div>
+
+            <div id="poruke" class="messages"></div>
+        </div>
+    </div>
+
+    <script src="EditorTeksta.js"></script>
+    <script src="PoziviAjax.js"></script>
+    <script src="editor.js"></script>
+</body>
+</html>
