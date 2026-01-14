@@ -1,0 +1,1 @@
+PoziviAjax.js nije bio u istom folderu gdje su ostali .js fajlovi

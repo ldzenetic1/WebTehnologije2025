@@ -105,6 +105,8 @@ function unlockUserLine(userId) {
   }
 }
 
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.post('/api/scenarios', (req, res) => {
   const { title } = req.body;
   const scenarioTitle = (title && title.trim() !== '') ? title : 'Neimenovani scenarij';

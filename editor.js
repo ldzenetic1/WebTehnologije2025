@@ -61,7 +61,7 @@ window.addEventListener("DOMContentLoaded", function () {
         ispisi(editor.grupisiUloge());
     };
 
-    const btnKreirajScenarij = document.getElementById("btnKreirajScenarij");
+    const btnKreirajScenarij = document.getElementById("btnKreirajNovi");
     if (btnKreirajScenarij) {
         btnKreirajScenarij.onclick = () => {
             const naslov = prompt("Unesite naslov scenarija:");
@@ -77,7 +77,7 @@ window.addEventListener("DOMContentLoaded", function () {
         };
     }
 
-    const btnUcitajScenarij = document.getElementById("btnUcitajScenarij");
+    const btnUcitajScenarij = document.getElementById("btnUcitajScenario");
     if (btnUcitajScenarij) {
         btnUcitajScenarij.onclick = () => {
             const scenarioId = parseInt(prompt("Unesite ID scenarija:"));
@@ -141,7 +141,7 @@ window.addEventListener("DOMContentLoaded", function () {
         };
     }
 
-    const btnPreimenujLika = document.getElementById("btnPreimenujLika");
+    const btnPreimenujLika = document.getElementById("btnPromijeniIme");
     if (btnPreimenujLika) {
         btnPreimenujLika.onclick = () => {
             if (!currentScenarioId) {
@@ -169,7 +169,7 @@ window.addEventListener("DOMContentLoaded", function () {
         };
     }
 
-    const btnProveriPromene = document.getElementById("btnProveriPromene");
+    const btnProveriPromene = document.getElementById("btnUcitajPromjene");
     if (btnProveriPromene) {
         btnProveriPromene.onclick = () => {
             if (!currentScenarioId) {
@@ -179,7 +179,7 @@ window.addEventListener("DOMContentLoaded", function () {
             API.getDeltas(currentScenarioId, lastTimestamp, (status, data) => {
                 if (status === 200) {
                     if (data.deltas.length === 0) {
-                        ispisi("Nema novih promena.");
+                        ispisi("Nema novih promjena.");
                     } else {
                         ispisi(data.deltas);
                         if (data.deltas.length > 0) {
@@ -197,7 +197,7 @@ window.addEventListener("DOMContentLoaded", function () {
         if (currentScenarioId) {
             API.getDeltas(currentScenarioId, lastTimestamp, (status, data) => {
                 if (status === 200 && data.deltas.length > 0) {
-                    console.log("Nove promene:", data.deltas);
+                    console.log("Nove promjene:", data.deltas);
                     lastTimestamp = data.deltas[data.deltas.length - 1].timestamp;
                 }
             });
