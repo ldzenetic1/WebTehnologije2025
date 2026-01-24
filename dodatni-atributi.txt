@@ -1,0 +1,15 @@
+Dodatni atributi u modelima:
+
+Scenario model:
+- Nema dodatnih atributa
+
+Line model:
+- Nema dodatnih atributa
+
+Delta model:
+- Nema dodatnih atributa
+
+Checkpoint model:
+- Nema dodatnih atributa
+
+Sve tražene funkcionalnosti su implementirane koristeći samo navedene atribute iz specifikacije.

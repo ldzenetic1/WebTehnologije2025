@@ -6,6 +6,31 @@
   },
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^5.2.1"
-  }
+    "express": "^5.2.1",
+    "mysql2": "^3.16.1",
+    "sequelize": "^6.37.7",
+    "sqlite3": "^5.1.7"
+  },
+  "name": "wt26p19708",
+  "version": "1.0.0",
+  "description": "",
+  "main": "database.js",
+  "scripts": {
+    "test": "mocha",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://ldzenetic1@bitbucket.org/ldzenetic/wt26p19708.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://bitbucket.org/ldzenetic/wt26p19708/issues"
+  },
+  "homepage": "https://bitbucket.org/ldzenetic/wt26p19708#readme"
+
+  
 }

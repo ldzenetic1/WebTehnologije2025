@@ -4,12 +4,15 @@ window.addEventListener("DOMContentLoaded", function () {
     const poruke = document.getElementById("poruke"); 
     const inputUloga = document.getElementById("ulogaInput"); 
 
-    const API = typeof PoziviAjax !== 'undefined' ? PoziviAjax : PoziviAjaxFetch;
+    //const API = typeof PoziviAjax !== 'undefined' ? PoziviAjax : PoziviAjaxFetch;
 
+    const API = PoziviAjax;
+    
     const userId = Math.floor(Math.random() * 10000);
     let currentScenarioId = null;
     let currentLineId = null;
     let lastTimestamp = 0;
+    let isCheckingDeltas = false;
 
     let editor = null;
     try {
@@ -66,9 +69,14 @@ window.addEventListener("DOMContentLoaded", function () {
         btnKreirajScenarij.onclick = () => {
             const naslov = prompt("Unesite naslov scenarija:");
             API.postScenario(naslov || "", (status, data) => {
-                if (status === 200) {
+                if (status >= 200 && status < 300) {
                     currentScenarioId = data.id;
                     currentLineId = data.content[0].lineId;
+                    div.innerHTML = '';
+                    const p = document.createElement('p');
+                    p.textContent = '(prazna linija)';
+                    p.dataset.lineId = data.content[0].lineId;
+                    div.appendChild(p);
                     ispisi(`✅ Scenarij kreiran! ID: ${data.id}`);
                 } else {
                     ispisi(`❌ Greška: ${data.message}`);
@@ -81,11 +89,14 @@ window.addEventListener("DOMContentLoaded", function () {
     if (btnUcitajScenarij) {
         btnUcitajScenarij.onclick = () => {
             const scenarioId = parseInt(prompt("Unesite ID scenarija:"));
-            if (!scenarioId) return;
+            if (!scenarioId || isNaN(scenarioId)) {
+                return ispisi("⚠️ Unesite validan ID scenarija!");
+            }
             
             API.getScenario(scenarioId, (status, data) => {
-                if (status === 200) {
+                if (status >= 200 && status < 300) {
                     currentScenarioId = data.id;
+                    lastTimestamp = 0;
                     div.innerHTML = '';
                     data.content.forEach(line => {
                         const p = document.createElement('p');
@@ -93,7 +104,7 @@ window.addEventListener("DOMContentLoaded", function () {
                         p.dataset.lineId = line.lineId;
                         div.appendChild(p);
                     });
-                    ispisi(`✅ Scenarij učitan: ${data.title}`);
+                    ispisi(`✅ Scenarij učitan: ${data.title} (${data.content.length} linija)`);
                 } else {
                     ispisi(`❌ Greška: ${data.message}`);
                 }
@@ -108,10 +119,12 @@ window.addEventListener("DOMContentLoaded", function () {
                 return ispisi("⚠️ Prvo učitajte scenarij!");
             }
             const lineId = parseInt(prompt("Unesite ID linije za zaključavanje:"));
-            if (!lineId) return;
+            if (!lineId || isNaN(lineId)) {
+                return ispisi("⚠️ Unesite validan ID linije!");
+            }
 
             API.lockLine(currentScenarioId, lineId, userId, (status, data) => {
-                if (status === 200) {
+                if (status >= 200 && status < 300) {
                     currentLineId = lineId;
                     ispisi(`🔒 ${data.message}`);
                 } else {
@@ -131,9 +144,29 @@ window.addEventListener("DOMContentLoaded", function () {
             if (noviTekst === null) return;
 
             API.updateLine(currentScenarioId, currentLineId, userId, [noviTekst], (status, data) => {
-                if (status === 200) {
+                if (status >= 200 && status < 300) {
                     ispisi(`✅ ${data.message}`);
-                    currentLineId = null; 
+                    currentLineId = null;
+                    refreshScenario();
+                } else {
+                    ispisi(`❌ ${data.message}`);
+                }
+            });
+        };
+    }
+
+    const btnZakljucajIme = document.getElementById("btnZakljucajIme");
+    if (btnZakljucajIme) {
+        btnZakljucajIme.onclick = () => {
+            if (!currentScenarioId) {
+                return ispisi("⚠️ Prvo učitajte scenarij!");
+            }
+            const imeLika = prompt("Unesite ime lika za zaključavanje:");
+            if (!imeLika) return;
+
+            API.lockCharacter(currentScenarioId, imeLika, userId, (status, data) => {
+                if (status >= 200 && status < 300) {
+                    ispisi(`🔒 ${data.message}`);
                 } else {
                     ispisi(`❌ ${data.message}`);
                 }
@@ -151,13 +184,14 @@ window.addEventListener("DOMContentLoaded", function () {
             if (!staroIme) return;
 
             API.lockCharacter(currentScenarioId, staroIme, userId, (status, data) => {
-                if (status === 200) {
+                if (status >= 200 && status < 300) {
                     const novoIme = prompt("Unesite novo ime lika:");
                     if (!novoIme) return;
 
                     API.updateCharacter(currentScenarioId, userId, staroIme, novoIme, (status2, data2) => {
-                        if (status2 === 200) {
+                        if (status2 >= 200 && status2 < 300) {
                             ispisi(`✅ Lik preimenovan: ${staroIme} → ${novoIme}`);
+                            refreshScenario();
                         } else {
                             ispisi(`❌ ${data2.message}`);
                         }
@@ -169,19 +203,20 @@ window.addEventListener("DOMContentLoaded", function () {
         };
     }
 
-    const btnProveriPromene = document.getElementById("btnUcitajPromjene");
-    if (btnProveriPromene) {
-        btnProveriPromene.onclick = () => {
+    const btnProveriPromjene = document.getElementById("btnUcitajPromjene");
+    if (btnProveriPromjene) {
+        btnProveriPromjene.onclick = () => {
             if (!currentScenarioId) {
                 return ispisi("⚠️ Prvo učitajte scenarij!");
             }
 
             API.getDeltas(currentScenarioId, lastTimestamp, (status, data) => {
-                if (status === 200) {
+                if (status >= 200 && status < 300) {
                     if (data.deltas.length === 0) {
                         ispisi("Nema novih promjena.");
                     } else {
                         ispisi(data.deltas);
+                        applyDeltas(data.deltas);
                         if (data.deltas.length > 0) {
                             lastTimestamp = data.deltas[data.deltas.length - 1].timestamp;
                         }
@@ -193,18 +228,63 @@ window.addEventListener("DOMContentLoaded", function () {
         };
     }
 
+    function refreshScenario() {
+        if (!currentScenarioId) return;
+        
+        API.getScenario(currentScenarioId, (status, data) => {
+            if (status >= 200 && status < 300) {
+                div.innerHTML = '';
+                data.content.forEach(line => {
+                    const p = document.createElement('p');
+                    p.textContent = line.text || '(prazna linija)';
+                    p.dataset.lineId = line.lineId;
+                    div.appendChild(p);
+                });
+            }
+        });
+    }
+
+    function applyDeltas(deltas) {
+        deltas.forEach(delta => {
+            if (delta.type === 'line_update') {
+                const lineParagraph = div.querySelector(`[data-line-id="${delta.lineId}"]`);
+                if (lineParagraph) {
+                    lineParagraph.textContent = delta.content || '(prazna linija)';
+                } else {
+                    refreshScenario();
+                }
+            } else if (delta.type === 'char_rename') {
+                const paragraphs = div.querySelectorAll('p');
+                paragraphs.forEach(p => {
+                    if (p.textContent.includes(delta.oldName)) {
+                        p.textContent = p.textContent.split(delta.oldName).join(delta.newName);
+                    }
+                });
+            }
+        });
+    }
+
+    // ISPRAVKA: Automatska provjera promjena sa zaštitom od race condition
     function autoCheckDeltas() {
-        if (currentScenarioId) {
+        if (currentScenarioId && !isCheckingDeltas) {
+            isCheckingDeltas = true;
             API.getDeltas(currentScenarioId, lastTimestamp, (status, data) => {
-                if (status === 200 && data.deltas.length > 0) {
+                isCheckingDeltas = false;
+                if (status >= 200 && status < 300 && data.deltas.length > 0) {
                     console.log("Nove promjene:", data.deltas);
+                    applyDeltas(data.deltas);
                     lastTimestamp = data.deltas[data.deltas.length - 1].timestamp;
                 }
             });
         }
     }
 
-    setInterval(autoCheckDeltas, 5000);
+    const deltaInterval = setInterval(autoCheckDeltas, 5000);
+
+    // Cleanup kada se stranica zatvara
+    window.addEventListener('beforeunload', () => {
+        clearInterval(deltaInterval);
+    });
 
     ispisi(`Sistem pokrenut. User ID: ${userId}`);
 });

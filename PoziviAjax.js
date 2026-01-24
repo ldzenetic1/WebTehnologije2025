@@ -23,6 +23,12 @@ const PoziviAjax = (function() {
       callback(0, { message: 'Greška u mreži' });
     };
     
+    xhr.ontimeout = function() {
+      callback(0, { message: 'Zahtjev je istekao' });
+    };
+    
+    xhr.timeout = 10000; // 10 sekundi timeout
+    
     if (data) {
       xhr.send(JSON.stringify(data));
     } else {
@@ -38,35 +44,64 @@ const PoziviAjax = (function() {
     },
 
     lockLine: function(scenarioId, lineId, userId, callback) {
+      if (!scenarioId || !lineId || !userId) {
+        callback(400, { message: 'Nedostaju parametri!' });
+        return;
+      }
       const url = `${BASE_URL}/scenarios/${scenarioId}/lines/${lineId}/lock`;
       const data = { userId: userId };
       makeRequest('POST', url, data, callback);
     },
 
     updateLine: function(scenarioId, lineId, userId, newText, callback) {
+      if (!scenarioId || !lineId || !userId) {
+        callback(400, { message: 'Nedostaju parametri!' });
+        return;
+      }
+      if (!Array.isArray(newText)) {
+        callback(400, { message: 'newText mora biti niz!' });
+        return;
+      }
       const url = `${BASE_URL}/scenarios/${scenarioId}/lines/${lineId}`;
       const data = { userId: userId, newText: newText };
       makeRequest('PUT', url, data, callback);
     },
 
     lockCharacter: function(scenarioId, characterName, userId, callback) {
+      if (!scenarioId || !characterName || !userId) {
+        callback(400, { message: 'Nedostaju parametri!' });
+        return;
+      }
       const url = `${BASE_URL}/scenarios/${scenarioId}/characters/lock`;
       const data = { userId: userId, characterName: characterName };
       makeRequest('POST', url, data, callback);
     },
 
     updateCharacter: function(scenarioId, userId, oldName, newName, callback) {
+      if (!scenarioId || !userId || !oldName || !newName) {
+        callback(400, { message: 'Nedostaju parametri!' });
+        return;
+      }
       const url = `${BASE_URL}/scenarios/${scenarioId}/characters/update`;
       const data = { userId: userId, oldName: oldName, newName: newName };
       makeRequest('POST', url, data, callback);
     },
 
     getDeltas: function(scenarioId, since, callback) {
-      const url = `${BASE_URL}/scenarios/${scenarioId}/deltas?since=${since}`;
+      if (!scenarioId) {
+        callback(400, { message: 'Nedostaje scenarioId!' });
+        return;
+      }
+      const sinceParam = since || 0;
+      const url = `${BASE_URL}/scenarios/${scenarioId}/deltas?since=${sinceParam}`;
       makeRequest('GET', url, null, callback);
     },
 
     getScenario: function(scenarioId, callback) {
+      if (!scenarioId) {
+        callback(400, { message: 'Nedostaje scenarioId!' });
+        return;
+      }
       const url = `${BASE_URL}/scenarios/${scenarioId}`;
       makeRequest('GET', url, null, callback);
     }
