@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  mysql-db:
+    image: mysql:latest
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: wt26
+    networks:
+      - arm-mreza
+
+  nodejs-container:
+    image: nodejs-app:v1.0
+    container_name: nodejs-container
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql-db
+    networks:
+      - arm-mreza
+
+networks:
+  arm-mreza:
+    driver: bridge
